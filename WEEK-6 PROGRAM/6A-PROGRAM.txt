@@ -1,0 +1,149 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void append(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+    struct Node* temp = *head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+}
+
+void printList(struct Node* head) {
+    struct Node* temp = head;
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+void sortList(struct Node* head) {
+    if (head == NULL) return;
+    struct Node* i = head;
+    struct Node* j = NULL;
+    int temp;
+    while (i != NULL) {
+        j = i->next;
+        while (j != NULL) {
+            if (i->data > j->data) {
+
+                temp = i->data;
+                i->data = j->data;
+                j->data = temp;
+            }
+            j = j->next;
+        }
+        i = i->next;
+    }
+}
+
+void reverseList(struct Node** head) {
+    struct Node *prev = NULL, *current = *head, *next = NULL;
+    while (current != NULL) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    *head = prev;
+}
+
+void concatenateLists(struct Node** head1, struct Node* head2) {
+    if (*head1 == NULL) {
+        *head1 = head2;
+        return;
+    }
+    struct Node* temp = *head1;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = head2;
+}
+
+int main() {
+    struct Node* list1 = NULL;
+    struct Node* list2 = NULL;
+    int n1, n2, data;
+
+
+    printf("Enter the number of nodes for List 1: ");
+    scanf("%d", &n1);
+    printf("Enter the values for List 1:\n");
+    for (int i = 0; i < n1; i++) {
+        printf("Enter data for node %d: ", i + 1);
+        scanf("%d", &data);
+        append(&list1, data);
+    }
+
+
+    printf("Enter the number of nodes for List 2: ");
+    scanf("%d", &n2);
+    printf("Enter the values for List 2:\n");
+    for (int i = 0; i < n2; i++) {
+        printf("Enter data for node %d: ", i + 1);
+        scanf("%d", &data);
+        append(&list2, data);
+    }
+
+    int choice;
+
+    while (1) {
+        printf("\nMenu:\n");
+        printf("1. Sort List \n");
+        printf("2. Reverse List \n");
+        printf("3. Concatenate List 1 and List 2\n");
+        printf("4. Print List 1\n");
+        printf("5. Print List 2\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                sortList(list1);
+                printf("List  sorted.\n");
+                break;
+            case 2:
+                reverseList(&list1);
+                printf("List 1 reversed.\n");
+                break;
+            case 3:
+                concatenateLists(&list1, list2);
+                printf("List 2 concatenated to List 1.\n");
+                break;
+            case 4:
+                printf("List 1: ");
+                printList(list1);
+                break;
+            case 5:
+                printf("List 2: ");
+                printList(list2);
+                break;
+            case 6:
+                printf("Exiting...\n");
+                exit(0);
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    }
+
+    return 0;
+}
